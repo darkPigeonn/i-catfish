@@ -1,0 +1,86 @@
+<template name="App_home">
+  <style>
+    /* Style the content */
+    .content {
+      /* margin-left: 260px; */
+      padding: 20px;
+    }
+
+    /* Style the header */
+    .header {
+      background-color: #0045a7;
+      color: white;
+      padding: 5px;
+      margin-bottom: 10px;
+    }
+  </style>
+
+
+  <div>
+    <!-- Sidebar -->
+    <!-- <div class="sidebar">
+      <a href="#">Dashboard</a>
+      <a href="#">Profile</a>
+      <a href="#">Messages</a>
+      <a href="#">Settings</a>
+    </div> -->
+
+    <!-- Content -->
+    <div class="content">
+
+      <div class="row">
+        <!-- Card for Batch Panen -->
+        <div class="col-md-3 my-2">
+          <div class="card bg-primary text-white">
+            <div class="card-body">
+              <h5 class="card-title">Jumlah Batch Panen</h5>
+              <p class="card-text">{{batchs.length}}</p>
+            </div>
+          </div>
+        </div>
+        <!-- Card for Total Kolam Aktif -->
+        <div class="col-md-3 my-2">
+          <div class="card bg-success text-white">
+            <div class="card-body">
+              <h5 class="card-title">Total Kolam</h5>
+              <p class="card-text">20</p>
+            </div>
+          </div>
+        </div>
+        <!-- Card for Total Pengeluaran -->
+        <div class="col-md-3 my-2">
+          <div class="card bg-danger text-white">
+            <div class="card-body">
+              <h5 class="card-title">Total Pengeluaran</h5>
+              <p class="card-text">$5000</p>
+            </div>
+          </div>
+        </div>
+        <!-- Card for Total Pakan -->
+        <div class="col-md-3 my-2">
+          <div class="card bg-warning text-white">
+            <div class="card-body">
+              <h5 class="card-title">Total Pakan</h5>
+              <p class="card-text">1000 kg</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <!-- list batch pemijahan aktif -->
+      <h3>Daftar Batch Pemijahan Aktif</h3>
+      <div class="row">
+
+        <!-- Card for Batch Pemijahan 2 -->
+        {{#each batchs}}
+        <div class="col-md-4 mb-4">
+          {{> card id=_id name=name amountBS=amountBroodStock startDate=startDate}}
+        </div>
+
+        {{/each}}
+
+      </div>
+    </div>
+  </div>
+
+</template>
