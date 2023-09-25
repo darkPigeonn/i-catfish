@@ -37,3 +37,10 @@ FlowRouter.route("/batch/detail/:_id", {
     this.render("App_body", "batch_detail");
   },
 });
+
+FlowRouter.route("/users/list/", {
+  name: "users list",
+  action() {
+    this.render("App_body", "users_list");
+  },
+});
