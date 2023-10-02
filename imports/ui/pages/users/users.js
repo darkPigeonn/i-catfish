@@ -24,11 +24,7 @@ Template.users_list.helpers({
         name: "fullName",
         type: "text",
       },
-      {
-        label: "Nama Perternakan",
-        name: "farm",
-        type: "text",
-      },
+
       {
         label: "Nomor Telephone",
         name: "telp",
@@ -41,5 +37,30 @@ Template.users_list.helpers({
 Template.users_list.events({
   "click #btn-add"(e, t) {
     e.preventDefault();
+  },
+  "click #btn-register"(e, t) {
+    e.preventDefault();
+
+    const fullName = $("#input-fullName").val();
+    const farmName = $("#input-farm").val();
+    const telp = $("#input-telp").val();
+    const password = $("#input-password").val();
+    const username = $("#input-username").val();
+
+    Meteor.call(
+      "add-breeder",
+      fullName,
+      farmName,
+      telp,
+      password,
+      username,
+      function (error, result) {
+        if (result) {
+          alert("Berhasil");
+        } else {
+          alert("Gagal");
+        }
+      }
+    );
   },
 });
