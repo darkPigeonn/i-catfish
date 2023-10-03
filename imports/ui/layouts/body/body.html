@@ -1,9 +1,9 @@
 <template name="App_body">
   {{#if currentUser}}
   <section>
-    {{> navbar}}
+    {{> navbar accessUser=accessUser}}
     <div class="container">
-      {{> yield}}
+      {{> yield accessUser=accessUser}}
     </div>
   </section>
   {{else}}

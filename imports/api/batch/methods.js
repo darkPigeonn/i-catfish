@@ -2,13 +2,32 @@ import { Batch } from "./batch";
 import { check } from "meteor/check";
 Meteor.methods({
   "batch.getAll"() {
-    return Batch.find().fetch();
+    const thisUser = Meteor.users.findOne({ _id: this.userId });
+    if (!thisUser) {
+      throw new Meteor.Error("Access Forbidden");
+    }
+    let filter = {};
+
+    console.log(thisUser);
+
+    if (!thisUser.roles.includes["superadmin"]) {
+      filter = {
+        farmCode: thisUser.farmCode,
+      };
+    }
+
+    return Batch.find(filter).fetch();
   },
   "batch.getBy"(id) {
     check(id, String);
     return Batch.findOne({ _id: id });
   },
   async "batch.insert"(name, startDate, amountBroodStock) {
+    const thisUser = Meteor.users.findOne({ _id: this.userId });
+    if (!thisUser) {
+      throw new Meteor.Error("Access Forbidden");
+    }
+
     check(name, String);
     check(startDate, String);
     check(amountBroodStock, String);
@@ -23,6 +42,7 @@ Meteor.methods({
       createdAt: new Date(),
       createdBy: "Admin Bulk",
       isActive: true,
+      farmCode: thisUser.farmCode,
     };
 
     return await Batch.insert(dataSave);

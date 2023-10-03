@@ -1,6 +1,23 @@
 import "./body.html";
 import "../../components/navbar/navbar.js";
 import { Meteor } from "meteor/meteor";
+
+Template.App_body.onCreated(function () {
+  const self = this;
+  self.accessUser = new ReactiveVar();
+
+  Meteor.call("thisUserAccess", function (error, result) {
+    if (result) {
+      self.accessUser.set(result);
+    } else {
+    }
+  });
+});
+Template.App_body.helpers({
+  accessUser() {
+    return Template.instance().accessUser.get();
+  },
+});
 Template.login_page.events({
   "click .submit"(e, t) {
     e.preventDefault();
