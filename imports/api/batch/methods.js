@@ -13,7 +13,7 @@ Meteor.methods({
         farmCode: thisUser.farmCode,
       };
     }
-    const batchs = Batch.find(filter).fetch();
+    const batchs = Batch.find(filter, { sort: { createdAt: -1 } }).fetch();
 
     console.log(batchs);
     return batchs;
