@@ -8,15 +8,15 @@ Meteor.methods({
     }
     let filter = {};
 
-    console.log(thisUser);
-
     if (!thisUser.roles.includes["superadmin"]) {
       filter = {
         farmCode: thisUser.farmCode,
       };
     }
+    const batchs = Batch.find(filter).fetch();
 
-    return Batch.find(filter).fetch();
+    console.log(batchs);
+    return batchs;
   },
   "batch.getBy"(id) {
     check(id, String);
@@ -65,5 +65,22 @@ Meteor.methods({
       { _id: id },
       { $addToSet: { feedsDetails: dataSave } }
     );
+  },
+  async "batch.deleteFeed"(id, feedId) {
+    feedId = parseInt(feedId);
+    const batch = Batch.findOne({ _id: id });
+    if (!batch) {
+      throw new Meteor.Error("Batch not found");
+    }
+    let feed = batch.feedsDetails;
+
+    feed = feed.splice(feedId, 1);
+    const fruits = ["apple"];
+
+    // Remove the only element in the array
+    fruits.splice(0, 1);
+    console.log(fruits);
+    const result = Batch.update({ _id: id }, { $set: { feedsDetails: feed } });
+    return result;
   },
 });

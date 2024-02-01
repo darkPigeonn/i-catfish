@@ -108,4 +108,20 @@ Template.batch_detail.events({
       }
     );
   },
+  "click #btn-remove"(e, t) {
+    e.preventDefault();
+    const thisItem = this;
+    const milik = e.target.getAttribute("milik");
+
+    const batch = t.batch.get();
+
+    Meteor.call("batch.deleteFeed", batch._id, milik, function (error, result) {
+      if (result) {
+        alert("Berhasil");
+        location.reload();
+      } else {
+        alert("Gagal");
+      }
+    });
+  },
 });

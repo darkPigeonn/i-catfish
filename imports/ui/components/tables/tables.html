@@ -33,6 +33,9 @@
             <td>
               {{formatRp total}}
             </td>
+            <td>
+              <button id="btn-remove" class="btn btn-danger float-right" milik="{{@index}}"><i class="fa fa-trash"
+                  milik="{{@index}}"></i></button> </td>
           </tr>
           {{/each}}
         </tbody>
@@ -44,6 +47,8 @@
         <div class="card-body">
           <h5 class="card-title">{{formatHRDate feedDate}}</h5>
           <p class="card-text">{{fc_label feedCategory}} | {{feedAmount}} | {{formatRp total}}</p>
+          <button id="btn-remove" class="btn btn-danger float-right" milik="{{@index}}"><i class="fa fa-trash"
+              milik="{{@index}}"></i></button>
         </div>
       </div>
       {{/each}}

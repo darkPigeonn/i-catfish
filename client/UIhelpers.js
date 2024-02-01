@@ -40,16 +40,12 @@ Template.registerHelper("equals", function (a, b) {
 Template.registerHelper("fc_label", function (a) {
   let value = "";
 
-  switch (a) {
-    case "fc-1": {
-      value = "Cacing Sutra";
-    }
-    case "fc-2": {
-      value = "Pengli";
-    }
-    case "fc-3": {
-      value = "PF-500";
-    }
+  if (a === "fc-1") {
+    value = "Cacing Sutra";
+  } else if (a === "fc-2") {
+    value = "Pengli";
+  } else {
+    value = "PF-500";
   }
   return value;
 });
