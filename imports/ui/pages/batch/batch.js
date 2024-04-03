@@ -2,7 +2,11 @@ import "./batch.html";
 import "../../components/card/card";
 import "../../components/tables/tables";
 import { FlowRouter } from "meteor/ostrio:flow-router-extra";
-
+export const startSelect2 = function () {
+  setTimeout(() => {
+    $(".select2").select2();
+  }, 200);
+};
 Template.batch_page.onCreated(function () {
   const self = this;
 
@@ -53,24 +57,37 @@ Template.batch_detail.onCreated(function () {
   self.batch = new ReactiveVar();
   self.viewMode = new ReactiveVar("1");
   const id = FlowRouter.getParam("_id");
-
   Meteor.call("batch.getBy", id, function (error, result) {
     if (result) {
       self.batch.set(result);
+      if (!result.isActive) {
+        $("button").prop("disabled", true);
+      }
     } else {
       console.log(error);
     }
   });
+  startSelect2();
+
+  //ini untuk nyimpan hasil panen
+  self.items = new ReactiveVar();
 });
 Template.batch_detail.helpers({
   batch() {
     return Template.instance().batch.get();
+  },
+  itemsInput() {
+    return Template.instance().items.get();
   },
   viewMode() {
     return Template.instance().viewMode.get();
   },
 });
 Template.batch_detail.events({
+  "click .btn-finish"(e, t) {
+    e.preventDefault();
+    $("#modalPanen").modal("show");
+  },
   "click .btn-add-feed"(e, t) {
     e.preventDefault();
 
@@ -123,5 +140,65 @@ Template.batch_detail.events({
         alert("Gagal");
       }
     });
+  },
+  "click #btn-add-items"(e, t) {
+    e.preventDefault();
+    const size = $("#input-size").val();
+    const amount = convert2number($("#input-amount").val());
+    const price = convert2number($("#input-price").val());
+    const subTotal = amount * price;
+    const thisItem = {
+      size,
+      amount,
+      price,
+      subTotal,
+    };
+    let thisItems = t.items.get();
+    if (thisItems) {
+      thisItems.items.push(thisItem);
+    } else {
+      thisItems = {
+        items: [thisItem],
+      };
+    }
+    t.items.set(thisItems);
+    $("#input-size").val("");
+    $("#input-amount").val("");
+    $("#input-price").val("");
+  },
+  "click #btn-save-panen"(e, t) {
+    e.preventDefault();
+    const timeStamp = $("#date-panen").val();
+    const buyer = $("#input-buyer").val();
+    const amount = convert2number($("#input-total-amount").val());
+    const items = t.items.get();
+    const id = FlowRouter.current().params._id;
+
+    Meteor.call(
+      "batch.panen",
+      id,
+      timeStamp,
+      buyer,
+      amount,
+      items,
+      function (error, result) {
+        if (result) {
+          // successAlert("Berhasil");
+          alert("Berhasil");
+          location.reload();
+        } else {
+          failAlert("Gagal", error);
+        }
+      }
+    );
+  },
+  "keyup #input-total-amount"(e, t) {
+    e.target.value = formatRupiah($("#input-total-amount").val(), "Rp. ");
+  },
+  "keyup #input-amount"(e, t) {
+    e.target.value = formatRupiah($("#input-amount").val(), "Rp. ");
+  },
+  "keyup #input-price"(e, t) {
+    e.target.value = formatRupiah($("#input-price").val(), "Rp. ");
   },
 });

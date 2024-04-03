@@ -35,13 +35,18 @@ Meteor.methods({
   },
   async thisUserAccess() {
     const thisUser = Meteor.users.findOne({ _id: this.userId });
-    const roles = thisUser.roles;
-    let access = {};
+    console.log(thisUser);
+    if (thisUser.roles) {
+      const roles = thisUser.roles;
+      let access = {};
 
-    if (thisUser.roles.includes["superadmin"]) {
-      access.usersList = true;
+      if (thisUser.roles.includes["superadmin"]) {
+        access.usersList = true;
+      }
+      console.log(access);
+      return access;
+    } else {
+      return;
     }
-    console.log(access);
-    return access;
   },
 });

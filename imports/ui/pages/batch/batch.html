@@ -50,49 +50,112 @@
 
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Batch {{batch.name}}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Jumlah Induk : {{batch.amountBroodStock}}</h6>
-          <p class="card-text">Tanggal pemijahan : {{formatHRDate batch.startDate}}</p>
+          <div class="d-flex justify-content-between">
+            <div class="left">
+              <h5 class="card-title">Batch {{batch.name}} </h5>
+              <h6 class="card-subtitle mb-2 text-muted">Jumlah Induk : {{batch.amountBroodStock}}</h6>
+              <p class="card-text">Tanggal pemijahan : {{formatHRDate batch.startDate}}</p>
+            </div>
+            <div class="right">
+              {{#if batch.isActive}}
+              <button class="btn btn-primary  my-2 btn-finish">Panen</button>
+              {{else}}
+              <div class="label-panen">PANEN</div>
+              {{/if}}
+            </div>
+          </div>
+          <hr>
+          <div class="data-container">
+            {{#if batch.status}}
+            <h3>Rekap Panen</h3>
+            <div class="card panen">
+              <div class="card-body">
+                <div class="card-title">Tanggal Panen : {{formatHRDate batch.updateAt}}</div>
+                <div class="card-title">Pembeli : {{batch.buyer}}</div>
+                <div class="card-title">Total Ikan : {{formatRibuan batch.panenTotalFish}} </div>
+                <div class="card-title">Total Pendapatan Kotor : Rp. {{formatRibuan batch.panenIncome}} </div>
+              </div>
+            </div>
+            <hr>
+            {{/if}}
+
+            <h3>Rekap Pengeluaran</h3>
+
+            <table class="table table-border">
+              <thead>
+                <th>Jenis Pengeluaran</th>
+                <th class="d-none d-lg-block">Total Jumlah</th>
+                <th>Total Pengeluaran</th>
+              </thead>
+              <tbody>
+                {{#each batch.rekapKategori}}
+                <tr>
+                  <td>{{label}}</td>
+                  <td class="d-none d-lg-block">{{qty}}</td>
+                  <td>{{formatRp amount}}</td>
+                </tr>
+                {{/each}}
+              </tbody>
+              <tfoot>
+                <th>
+                  Total Pengeluaran
+                </th>
+                <th colspan="2" class="d-none d-lg-block">
+                  Total Pengeluaran
+                </th>
+                <th>
+                  {{formatRp batch.expensesTotal}}
+                </th>
+              </tfoot>
+            </table>
+
+
+          </div>
           <button class="btn btn-primary">Status : Aktif</button>
         </div>
       </div>
 
+
       <div class="d-flex justify-content-end">
+
         <button class="btn btn-primary btn-add-feed my-2" milik="{{viewMode}}">
           {{#if equals viewMode '1'}}
-          + Tambah Pakan
+          + Tambah Pengeluaran
           {{else}}
-          Daftar Pakan
+          Daftar Pengeluaran
           {{/if}}
         </button>
       </div> <!-- list pemberian pakan -->
 
       {{#if equals viewMode '1'}}
       <div class="page-list-feed">
-        <h4>Daftar Pemberian Pakan</h4>
+        <h4>Daftar Pengeluaran</h4>
         {{> table1 data=batch.feedsDetails}}
       </div>
       {{else}}
-      <h3>Input Pakan</h3>
+      <h3>Input Pengeluaran</h3>
       <form>
         <div class="form-group mb-2">
           <div class="form-group mb-2">
-            <label>Tanggal Pakan </label>
+            <label>Tanggal Pengeluaran </label>
             <input type="date" id="input_feedDate" class="form-control" />
           </div>
-          <label>Pakan </label>
-          <select class="form-control" id="input_feedCategory">
+          <label>Item </label>
+          <select class="form-control select2" id="input_feedCategory">
             <option value="fc-1">Cacing Sutra</option>
             <option value="fc-2">Pengli</option>
             <option value="fc-3">PF-500</option>
+            <option value="fc-4">Air</option>
+            <option value="fc-5">Akomodasi</option>
+            <option value="fc-6">Peralatan</option>
           </select>
         </div>
         <div class="form-group mb-2">
-          <label>Jumlah Pakan </label>
+          <label>Jumlah</label>
           <input type="number" id="input_feedAmount" class="form-control" />
         </div>
         <div class="form-group mb-2">
-          <label>Harga Pakan </label>
+          <label>Harga</label>
           <input type="number" id="input_feedPrices" class="form-control" />
         </div>
         <div class="d-grid gap-2">
@@ -101,6 +164,82 @@
 
       </form>
       {{/if}}
+    </div>
+  </div>
+
+  <!-- Modal Panen -->
+  <!-- Modal -->
+  <div class="modal fade" id="modalPanen" tabindex="-1" role="dialog" aria-labelledby="modalPanenTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Panen</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="form-input-item" class="form-input-item">
+            <div class="form-group">
+              <label for="date-panen">Tanggal Panen</label>
+              <input class="form-control" type="date" id="date-panen" />
+            </div>
+            <div class="form-group">
+              <label for="date-panen">Pengkulak</label>
+              <input class="form-control" type="text" id="input-buyer" />
+            </div>
+            <div class="form-group">
+              <label for="date-panen">Uang Yang Diterima</label>
+              <input class="form-control" type="text" id="input-total-amount" />
+            </div>
+
+          </form>
+          <label>Hasil</label>
+          {{#if itemsInput}}
+          <div class="section-items">
+            <table class="table table-warning">
+              <thead>
+                <th>Ukur Bibit</th>
+                <th>Jumlah</th>
+                <th>Harga</th>
+                <th>Total</th>
+              </thead>
+              <tbody>
+                {{#each itemsInput.items}}
+                <tr>
+                  <td>{{size}}</td>
+                  <td>{{formatRibuan amount}}</td>
+                  <td>{{formatRp price}}</td>
+                  <td>{{formatRp subTotal}}</td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+          {{/if}}
+        </div>
+        <div class="modal-footer">
+          <div class="form-row">
+            <div class="form-group col-4">
+              <label for="size">Ukur Bibit</label>
+              <input type="number" class="form-control" id="input-size" />
+            </div>
+            <div class="form-group col-4">
+              <label for="amount">Jumlah</label>
+              <input type="text" class="form-control" id="input-amount" />
+            </div>
+            <div class="form-group col-4">
+              <label for="price">Harga @</label>
+              <input type="text" class="form-control" id="input-price" />
+            </div>
+
+            <button class="btn btn-warning form-control" id="btn-add-items">+</button>
+          </div>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+          <button type="button" class="btn btn-primary" id="btn-save-panen">Simpan</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>

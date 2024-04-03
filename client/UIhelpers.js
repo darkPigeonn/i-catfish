@@ -1,7 +1,8 @@
 import Intl from "intl";
 import "intl/locale-data/jsonp/id-ID";
 import moment from "moment";
-
+import { Kategori } from "../imports/api/batch/batch";
+import numeral from "numeral";
 Template.registerHelper("formatRp", function (context, options) {
   if (context)
     return new Intl.NumberFormat("id-ID", {
@@ -10,6 +11,18 @@ Template.registerHelper("formatRp", function (context, options) {
     }).format(context);
   else {
     return "Rp. 0";
+  }
+});
+Template.registerHelper("formatRibuan", function (context, options) {
+  if (!isNaN(context)) {
+    if (context && !isNaN(parseInt(context))) {
+      return numeral(context).format("0,0.[00]");
+    } else {
+      return "0";
+    }
+  } else {
+    // console.log("disni");
+    return 0;
   }
 });
 
@@ -38,14 +51,6 @@ Template.registerHelper("equals", function (a, b) {
   return a == b;
 });
 Template.registerHelper("fc_label", function (a) {
-  let value = "";
-
-  if (a === "fc-1") {
-    value = "Cacing Sutra";
-  } else if (a === "fc-2") {
-    value = "Pengli";
-  } else {
-    value = "PF-500";
-  }
-  return value;
+  const masterKategori = Kategori.find((item) => item.code == a);
+  return masterKategori.label;
 });
