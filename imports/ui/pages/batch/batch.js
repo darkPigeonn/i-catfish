@@ -71,10 +71,23 @@ Template.batch_detail.onCreated(function () {
 
   //ini untuk nyimpan hasil panen
   self.items = new ReactiveVar();
+
+  self.categories = new ReactiveVar()
+  Meteor.call("categories.getAll", function(error,result){
+    if(error){
+      console.log(error);      
+    }else{
+      self.categories.set(result)
+     
+    }
+  })
 });
 Template.batch_detail.helpers({
   batch() {
     return Template.instance().batch.get();
+  },
+  categories(){
+    return Template.instance().categories.get()
   },
   itemsInput() {
     return Template.instance().items.get();
@@ -87,8 +100,10 @@ Template.batch_detail.events({
   "click .btn-finish"(e, t) {
     e.preventDefault();
     $("#modalPanen").modal("show");
+
   },
   "click .btn-add-feed"(e, t) {
+    startSelect2();
     e.preventDefault();
 
     const mode = $(e.target).attr("milik");
@@ -107,7 +122,10 @@ Template.batch_detail.events({
     const feedDate = $("#input_feedDate").val();
     const feedCategory = $("#input_feedCategory").val();
     const feedAmount = $("#input_feedAmount").val();
-    const feedPrices = $("#input_feedPrices").val();
+    console.log($("#input_feedPrices").val());
+    
+    const feedPrices = convert2number($("#input_feedPrices").val());
+console.log(feedPrices);
 
     const id = FlowRouter.getParam("_id");
 
@@ -200,5 +218,8 @@ Template.batch_detail.events({
   },
   "keyup #input-price"(e, t) {
     e.target.value = formatRupiah($("#input-price").val(), "Rp. ");
+  },
+  "keyup #input_feedPrices"(e, t) {
+    e.target.value = formatRupiah($("#input_feedPrices").val(), "Rp. ");
   },
 });

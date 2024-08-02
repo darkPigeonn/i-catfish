@@ -3,7 +3,6 @@
 import "./routes.js";
 
 formatRupiah = function (angka, prefix) {
-  console.log(angka);
   var number_string = angka.replace(/[^,\d]/g, "").toString(),
     split = number_string.split(","),
     sisa = split[0].length % 3,
@@ -22,6 +21,7 @@ formatRupiah = function (angka, prefix) {
 };
 
 convert2number = function (data) {
-  let temp = data.replace(".", "");
+  let temp = data.replace(/\./g, "");
   return parseFloat(temp);
 };
+

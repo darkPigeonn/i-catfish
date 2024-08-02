@@ -142,12 +142,15 @@
           </div>
           <label>Item </label>
           <select class="form-control select2" id="input_feedCategory">
-            <option value="fc-1">Cacing Sutra</option>
+            <!-- <option value="fc-1">Cacing Sutra</option>
             <option value="fc-2">Pengli</option>
             <option value="fc-3">PF-500</option>
             <option value="fc-4">Air</option>
             <option value="fc-5">Akomodasi</option>
-            <option value="fc-6">Peralatan</option>
+            <option value="fc-6">Peralatan</option> -->
+            {{#each categories}}
+            <option value="{{code}}">{{label}}</option>
+            {{/each}}
           </select>
         </div>
         <div class="form-group mb-2">
@@ -156,7 +159,7 @@
         </div>
         <div class="form-group mb-2">
           <label>Harga</label>
-          <input type="number" id="input_feedPrices" class="form-control" />
+          <input type="text" id="input_feedPrices" class="form-control" />
         </div>
         <div class="d-grid gap-2">
           <button class="btn btn-primary" type="button" id="btn_save">Simpan</button>

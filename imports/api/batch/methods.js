@@ -1,4 +1,4 @@
-import { Batch, Kategori, Panen } from "./batch";
+import { Batch, Kategori, KategoriHardcode, Panen } from "./batch";
 import { check } from "meteor/check";
 Meteor.methods({
   "batch.getAll"() {
@@ -21,25 +21,28 @@ Meteor.methods({
   async "batch.getBy"(id) {
     check(id, String);
     let thisBatch = await Batch.findOne({ _id: id });
-
-    const kategori = Kategori;
+   
+    
+    const kategori = Kategori.find().fetch();
     for (let index = 0; index < kategori.length; index++) {
       let element = kategori[index];
 
-      const findData = thisBatch.feedsDetails.filter(
-        (item) => item.feedCategory === element.code
-      );
-      if (findData) {
-        const qty = findData.reduce(
-          (accumulator, currentValue) => accumulator + currentValue.feedAmount,
-          0
+      if(thisBatch.feedsDetails){
+        const findData = thisBatch.feedsDetails.filter(
+          (item) => item.feedCategory === element.code
         );
-        const amount = findData.reduce(
-          (accumulator, currentValue) => accumulator + currentValue.total,
-          0
-        );
-        element.qty = qty;
-        element.amount = amount;
+        if (findData) {
+          const qty = findData.reduce(
+            (accumulator, currentValue) => accumulator + currentValue.feedAmount,
+            0
+          );
+          const amount = findData.reduce(
+            (accumulator, currentValue) => accumulator + currentValue.total,
+            0
+          );
+          element.qty = qty;
+          element.amount = amount;
+        }
       }
     }
     thisBatch.rekapKategori = kategori;
@@ -83,7 +86,7 @@ Meteor.methods({
   },
   async "batch.feedInsert"(id, feedDate, feedCategory, feedAmount, feedPrices) {
     feedAmount = parseFloat(feedAmount);
-    feedPrices = parseFloat(feedPrices);
+    
     const total = feedAmount * feedPrices;
     const dataSave = {
       feedDate,
@@ -169,4 +172,18 @@ Meteor.methods({
       }
     );
   },
+
+  //create kategories
+  'categories.create'(){
+    const kategori = KategoriHardcode;
+
+    for (let index = 0; index < kategori.length; index++) {
+      const element = kategori[index];
+      Kategori.insert(element)
+      
+    }
+  },
+  'categories.getAll'(){
+    return Kategori.find().fetch()
+  }
 });

@@ -45,3 +45,11 @@ FlowRouter.route("/users/list/", {
     this.render("App_body", "users_list");
   },
 });
+
+
+FlowRouter.route("/registerAccount",{
+  name: "register",
+  action(){
+    this.render("register")
+  }
+})

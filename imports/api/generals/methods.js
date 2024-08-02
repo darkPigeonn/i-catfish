@@ -36,6 +36,9 @@ Meteor.methods({
   async thisUserAccess() {
     const thisUser = Meteor.users.findOne({ _id: this.userId });
     console.log(thisUser);
+    if(!thisUser){
+      return;
+    }  
     if (thisUser.roles) {
       const roles = thisUser.roles;
       let access = {};
@@ -43,10 +46,28 @@ Meteor.methods({
       if (thisUser.roles.includes["superadmin"]) {
         access.usersList = true;
       }
-      console.log(access);
       return access;
     } else {
       return;
     }
   },
+
+  async 'users.register'(name, nameFarm, address, whatsapp, username, password){
+     // Validasi input dan simpan pengguna baru ke database
+   
+     if (password.length < 8) {
+      throw new Meteor.Error('password-too-short', 'Password harus minimal 8 karakter');
+    }
+
+    Accounts.createUser({
+      username,
+      password,
+      profile: {
+        name,
+        nameFarm,
+        address,
+        whatsapp,
+      },
+    });
+  }
 });
