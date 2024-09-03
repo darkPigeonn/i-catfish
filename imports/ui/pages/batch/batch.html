@@ -70,10 +70,42 @@
             <h3>Rekap Panen</h3>
             <div class="card panen">
               <div class="card-body">
-                <div class="card-title">Tanggal Panen : {{formatHRDate batch.updateAt}}</div>
-                <div class="card-title">Pembeli : {{batch.buyer}}</div>
-                <div class="card-title">Total Ikan : {{formatRibuan batch.panenTotalFish}} </div>
-                <div class="card-title">Total Pendapatan Kotor : Rp. {{formatRibuan batch.panenIncome}} </div>
+                <!-- <button class="btn btn-primary btn-ubah float-right" id="btn-ubah">Ubah</button> -->
+                <div class="row">
+                  <div class="col-4">
+                    <div class="card-title">Tanggal Panen : {{formatHRDate batch.updateAt}}</div>
+                  </div>
+                  <div class="col-4">
+                    <div class="card-title">Durasi : {{batch.duration}}</div>
+                  </div>
+                  <div class="col-4">
+                    <div class="card-title">Pembeli : {{batch.buyer}}</div>
+                  </div>
+                  <div class="col-4">
+                    <div class="card-title">Total Ikan : {{formatRibuan batch.panenTotalFish}} </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="card-title">Total Pendapatan Kotor : Rp. {{formatRibuan batch.panenIncome}} </div>
+                  </div>
+                </div>
+                <table class="table table-border">
+                  <thead>
+                    <th>Ukur Bibit</th>
+                    <th class="d-none d-lg-block">Jumlah</th>
+                    <th>Harga</th>
+                    <th>Total</th>
+                  </thead>
+                  <tbody>
+                    {{#each batch.items}}
+                    <tr>
+                      <td>{{size}}</td>
+                      <td class="d-none d-lg-block">{{amount}}</td>
+                      <td>{{formatRp price}}</td>
+                      <td>{{formatRp subTotal}}</td>
+                    </tr>
+                    {{/each}}
+                  </tbody>
+                </table>
               </div>
             </div>
             <hr>

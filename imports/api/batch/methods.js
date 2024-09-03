@@ -55,7 +55,29 @@ Meteor.methods({
 
     if (thisBatch.status == 60) {
       const panen = await Panen.findOne({ _id: thisBatch.panenId });
+      const startDate = new Date(thisBatch.startDate);
+      const endDate = new Date(panen.date);
+
+      // Hitung selisih dalam milidetik
+      const durationInMillis = endDate - startDate;
+
+      // Konversi milidetik ke hari
+      const durationInDays = Math.floor(durationInMillis / (1000 * 60 * 60 * 24));
+
+      // Hitung jumlah bulan dan hari
+      const months = Math.floor(durationInDays / 30); // Menganggap setiap bulan memiliki 30 hari
+      const days = durationInDays % 30;
+
+      // Format durasi menjadi bulan dan hari
+      thisBatch.duration = `${months} bulan ${days} hari`;
+      thisBatch.panenId = panen._id;
+      delete panen._id;
+
+
+
       thisBatch = { ...thisBatch, ...panen };
+
+
     }
     return thisBatch;
   },

@@ -14,7 +14,7 @@
 }
 
 .card .panen {
-  background-color : green;
-  color : white;
+  border :2px solid green;
+
   font-size : 18px
 }

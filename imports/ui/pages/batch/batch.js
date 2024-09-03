@@ -102,6 +102,12 @@ Template.batch_detail.events({
     $("#modalPanen").modal("show");
 
   },
+  "click .btn-ubah"(e,t){
+    e.preventDefault()
+
+    $("#modalPanen").modal("show");
+
+  },
   "click .btn-add-feed"(e, t) {
     startSelect2();
     e.preventDefault();
