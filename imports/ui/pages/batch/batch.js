@@ -75,10 +75,10 @@ Template.batch_detail.onCreated(function () {
   self.categories = new ReactiveVar()
   Meteor.call("categories.getAll", function(error,result){
     if(error){
-      console.log(error);      
+      console.log(error);
     }else{
       self.categories.set(result)
-     
+
     }
   })
 });
@@ -123,7 +123,7 @@ Template.batch_detail.events({
     const feedCategory = $("#input_feedCategory").val();
     const feedAmount = $("#input_feedAmount").val();
     console.log($("#input_feedPrices").val());
-    
+
     const feedPrices = convert2number($("#input_feedPrices").val());
 console.log(feedPrices);
 

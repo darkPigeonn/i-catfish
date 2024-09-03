@@ -50,7 +50,3 @@ Template.registerHelper("nomorUrut", function (context) {
 Template.registerHelper("equals", function (a, b) {
   return a == b;
 });
-Template.registerHelper("fc_label", function (a) {
-  const masterKategori = Kategori.find((item) => item.code == a);
-  return masterKategori.label;
-});

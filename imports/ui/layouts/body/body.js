@@ -38,7 +38,7 @@ Template.login_page.events({
         if (error) {
           alert(error);
         } else {
-          FlowRouter.go("home");
+          FlowRouter.go("/");
         }
       });
     } else {
@@ -49,7 +49,7 @@ Template.login_page.events({
     const passwordInput = document.querySelector('#input_password');
     const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
     passwordInput.setAttribute('type', type);
-    
+
     const icon = event.currentTarget.querySelector('i');
     icon.classList.toggle('fa-eye');
     icon.classList.toggle('fa-eye-slash');

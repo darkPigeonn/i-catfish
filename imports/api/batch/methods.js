@@ -21,8 +21,8 @@ Meteor.methods({
   async "batch.getBy"(id) {
     check(id, String);
     let thisBatch = await Batch.findOne({ _id: id });
-   
-    
+
+
     const kategori = Kategori.find().fetch();
     for (let index = 0; index < kategori.length; index++) {
       let element = kategori[index];
@@ -86,7 +86,7 @@ Meteor.methods({
   },
   async "batch.feedInsert"(id, feedDate, feedCategory, feedAmount, feedPrices) {
     feedAmount = parseFloat(feedAmount);
-    
+
     const total = feedAmount * feedPrices;
     const dataSave = {
       feedDate,
@@ -180,7 +180,7 @@ Meteor.methods({
     for (let index = 0; index < kategori.length; index++) {
       const element = kategori[index];
       Kategori.insert(element)
-      
+
     }
   },
   'categories.getAll'(){

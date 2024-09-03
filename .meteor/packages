@@ -28,3 +28,4 @@ johanbrook:publication-collector  # Test a Meteor publication by collecting its 
 accounts-base
 accounts-password
 
+simple:json-routes
